@@ -63,10 +63,11 @@ async function googleLoginController(req, res) {
     const isProduction = process.env.NODE_ENV === "production";
 
     res.cookie("token", jwtToken, {
-      httpOnly: true,
-      secure: isProduction, // ✅ true only in production
-      sameSite: isProduction ? "none" : "lax", // ✅ correct combo
-    });
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/"
+});
 
     res.status(200).json({
       message: "Google login successful",
@@ -118,11 +119,12 @@ async function verifyOtpController(req, res) {
 
     const isProduction = process.env.NODE_ENV === "production";
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: isProduction, // ✅ true only in production
-      sameSite: isProduction ? "none" : "lax", // ✅ correct combo
-    });
+    res.cookie("token", jwtToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/"
+});
 
     res.status(200).json({
       message: "Email verified and logged in successfully",
@@ -281,11 +283,12 @@ async function loginController(req, res) {
 
   const isProduction = process.env.NODE_ENV === "production";
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: isProduction, // ✅ true only in production
-    sameSite: isProduction ? "none" : "lax", // ✅ correct combo
-  });
+  res.cookie("token", jwtToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/"
+});
 
   res.status(200).json({
     message: "User logged in successfully",
@@ -326,11 +329,12 @@ async function getMeController(req, res) {
 
 function logoutController(req, res) {
   const isProduction = process.env.NODE_ENV === "production";
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-  });
+  res.cookie("token", jwtToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/"
+});
   res.status(200).json({ message: "Logged out successfully" });
 }
 
