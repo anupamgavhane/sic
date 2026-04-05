@@ -58,7 +58,7 @@ const Chat = () => {
     const newSocket = io(
       import.meta.env.MODE === 'production'
       ? window.location.origin
-      : 'http://localhost:3000',
+      : 'https://sic-v64w.onrender.com/',
       {
         withCredentials: true
       }
