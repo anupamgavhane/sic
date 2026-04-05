@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+/* ===== Font Import ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* ===== Animated Gradient Background using Custom Palette ===== */
+.animated-bg {
+  /* Night Bordeaux (#420217) and Hunter Green (#436436) base */
+  background: linear-gradient(135deg, #420217 0%, #436436 50%, #420217 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== Floating Blobs ===== */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  /* Spicy Orange (#C84C09) */
+  background: rgba(200, 76, 9, 0.4);
+  top: -10%;
+  left: -5%;
+  animation: blobFloat1 20s ease-in-out infinite;
+}
+
+.blob-2 {
+  width: 400px;
+  height: 400px;
+  /* Lime Cream (#D6F599) */
+  background: rgba(214, 245, 153, 0.15);
+  bottom: -10%;
+  right: -5%;
+  animation: blobFloat2 25s ease-in-out infinite;
+}
+
+.blob-3 {
+  width: 350px;
+  height: 350px;
+  /* Chartreuse (#D2FF28) */
+  background: rgba(210, 255, 40, 0.15);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: blobFloat3 18s ease-in-out infinite;
+}
+
+@keyframes blobFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, 40px) scale(1.1); }
+  50% { transform: translate(30px, -30px) scale(0.95); }
+  75% { transform: translate(-40px, 20px) scale(1.05); }
+}
+
+@keyframes blobFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-50px, -30px) scale(1.05); }
+  50% { transform: translate(-20px, 40px) scale(1.1); }
+  75% { transform: translate(40px, -20px) scale(0.95); }
+}
+
+@keyframes blobFloat3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  33% { transform: translate(-40%, -60%) scale(1.15); }
+  66% { transform: translate(-60%, -40%) scale(0.9); }
+}
+
+/* ===== Page Transition: Fade + Slide Up ===== */
+.page-enter {
+  animation: pageEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered card animations */
+.card-enter {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: cardEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Chat Message Animation ===== */
+.msg-enter {
+  animation: msgSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes msgSlide {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Custom Scrollbar (Glass Theme) ===== */
+.glass-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.glass-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.glass-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.glass-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===== Subtle Glow Effect for Active Elements using Custom Palette ===== */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(210, 255, 40, 0.3), 0 0 60px rgba(210, 255, 40, 0.1);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 20px rgba(200, 76, 9, 0.3), 0 0 60px rgba(200, 76, 9, 0.1);
+}

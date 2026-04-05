@@ -1,0 +1,22 @@
+# node_modules
+node_modules/
+Frontend/node_modules/
+Backend/node_modules/
+
+# env files
+.env
+Backend/.env
+Frontend/.env
+
+# build outputs
+dist/
+Frontend/dist/
+
+# logs
+npm-debug.log*
+
+# ignore markdown files
+Frontend/IMPLEMENTATION_COMPLETE.md
+Frontend/AUTHENTICATION_SETUP.md
+Frontend/QUICK_START.md
+Frontend/SETUP_VERIFICATION.md
