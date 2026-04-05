@@ -156,7 +156,7 @@ async function resendOtpController(req, res) {
     // 🛡️ prevent spam
     if (user.otpLastSent && now - user.otpLastSent < 60 * 1000) {
       return res.status(429).json({
-        message: "Please wait before requesting another OTP",
+        message: "Please wait 1 minute before requesting another OTP",
       });
     }
 
@@ -164,17 +164,22 @@ async function resendOtpController(req, res) {
 
     user.otp = otp;
     user.otpExpiry = Date.now() + 5 * 60 * 1000;
-    user.otpLastSent = now; // ✅ FIX (you missed this)
+    user.otpLastSent = now;
 
     await user.save();
 
-    await sendOtpEmail(email, otp);
+    try {
+      await sendOtpEmail(email, otp);
+    } catch (emailError) {
+      console.error("Email sending failed during resend:", emailError.message);
+      return res.status(500).json({ message: "Failed to send OTP email. Please try again." });
+    }
 
     res.status(200).json({
       message: "OTP resent successfully",
     });
   } catch (error) {
-    console.log(error);
+    console.log("Resend OTP error:", error);
     res.status(500).json({ message: "Server error" });
   }
 }
@@ -217,30 +222,18 @@ async function registerController(req, res) {
       otpLastSent: Date.now(),
     });
 
-    // const token = jwt.sign({
-    //     id:user._id
-    // },process.env.JWT_SECRET)
-
-    // res.cookie("token", token, {
-    //         httpOnly: true,
-    //         sameSite: "strict"
-    //     });
-
-    // res.status(201).json({
-    //     message:"User registered successfully",
-    //     user:{
-    //         email:user.email,
-    //         id:user._id,
-    //         fullName:user.fullName
-    //     }
-    // })
-    await sendOtpEmail(email, otp);
+    try {
+      await sendOtpEmail(email, otp);
+    } catch (emailError) {
+      console.error("Email sending failed during registration:", emailError.message);
+      return res.status(500).json({ message: "Failed to send OTP email. Please try again." });
+    }
 
     res.status(201).json({
       message: "OTP sent to email",
     });
   } catch (error) {
-    console.log(error);
+    console.log("Registration error:", error);
     res.status(500).json({ message: "Server error" });
   }
 }
