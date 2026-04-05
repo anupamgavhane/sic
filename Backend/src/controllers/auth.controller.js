@@ -117,9 +117,7 @@ async function verifyOtpController(req, res) {
       expiresIn: "1d",
     });
 
-    const isProduction = process.env.NODE_ENV === "production";
-
-    res.cookie("token", jwtToken, {
+    res.cookie("token", token, {
   httpOnly: true,
   secure: true,
   sameSite: "none",
@@ -281,9 +279,7 @@ async function loginController(req, res) {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-  const isProduction = process.env.NODE_ENV === "production";
-
-  res.cookie("token", jwtToken, {
+  res.cookie("token", token, {
   httpOnly: true,
   secure: true,
   sameSite: "none",
@@ -328,12 +324,12 @@ async function getMeController(req, res) {
 }
 
 function logoutController(req, res) {
-  const isProduction = process.env.NODE_ENV === "production";
-  res.cookie("token", jwtToken, {
+  res.cookie("token", "", {
   httpOnly: true,
   secure: true,
   sameSite: "none",
-  path: "/"
+  path: "/",
+  maxAge: 0
 });
   res.status(200).json({ message: "Logged out successfully" });
 }
