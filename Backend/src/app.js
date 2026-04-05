@@ -12,7 +12,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: "http://localhost:5173", // Vite default
+  origin: ["http://localhost:5173","https://sic-gules.vercel.app/"], // Vite default
   credentials: true
 }));
 
