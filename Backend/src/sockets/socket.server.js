@@ -70,7 +70,7 @@ function initSocketServer(httpServer) {
         //  For now we don’t have socket auth yet
         // so this is temporary (we’ll fix in next step)
 
-        // TEMP: allow join (we'll secure later)
+        // TEMP: allow join (we’ll secure later)
         const isMember = room.members.some(
           (m) => m.toString() === socket.user._id.toString(),
         );
@@ -86,6 +86,15 @@ function initSocketServer(httpServer) {
       } catch (err) {
         console.error(err);
         socket.emit("error", "Failed to join room");
+      }
+    });
+
+    socket.on("leaveRoom", (roomId) => {
+      try {
+        socket.leave(roomId);
+        console.log(`Socket ${socket.id} left room ${roomId}`);
+      } catch (err) {
+        console.error("Error leaving room:", err);
       }
     });
 

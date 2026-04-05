@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ArrowLeft, Users, Send, Info, MessageCircle, LogOut } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 import api from '../api/axios';
-import { io } from 'socket.io-client';
+import socket from '../utils/socket';
 import MessageBubble from '../components/MessageBubble';
 import Navbar from '../components/Navbar';
 import AnimatedBackground from '../components/AnimatedBackground';
@@ -19,10 +19,9 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [roomDetails, setRoomDetails] = useState(null);
-  const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(true);
   const [leaveLoading, setLeaveLoading] = useState(false);
-  
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -54,35 +53,36 @@ const Chat = () => {
 
     fetchRoomAndMessages();
 
-    // Socket.io connection using API base URL
-    const newSocket = io(
-      import.meta.env.MODE === 'production'
-      ? window.location.origin
-      : 'https://sic-v64w.onrender.com/',
-      {
-        withCredentials: true
-      }
-    );
-    setSocket(newSocket);
+    // Connect socket and join room
+    if (!socket.connected) {
+      socket.connect();
+    }
 
-    newSocket.emit('joinRoom', roomId);
+    socket.emit('joinRoom', roomId);
+    console.log('Emitted joinRoom for room:', roomId);
 
-    newSocket.on('newMessage', (message) => {
+    socket.on('newMessage', (message) => {
+      console.log('Received message:', message);
       setMessages((prev) => [...prev, message]);
     });
 
+    socket.on('error', (error) => {
+      console.error('Socket error:', error);
+    });
+
     return () => {
-      newSocket.disconnect();
+      socket.off('newMessage');
+      socket.off('error');
+      socket.emit('leaveRoom', roomId);
     };
   }, [roomId, navigate]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!newMessage.trim() || !socket || !roomDetails) return;
+    if (!newMessage.trim() || !roomDetails) return;
 
     const messageData = {
       roomId,
-      sender: user.id,
       text: newMessage,
     };
 
@@ -102,6 +102,7 @@ const Chat = () => {
 
     try {
       socket.emit('sendMessage', messageData);
+      console.log('Sent message to socket:', messageData);
     } catch (error) {
       console.error('Error sending message:', error);
       // Remove optimistic message if failed
