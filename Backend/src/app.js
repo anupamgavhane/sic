@@ -12,9 +12,21 @@ const app = express();
 
 
 app.use(cors({
-  origin: ["https://sic-gules.vercel.app","http://localhost:5173"], // Vite default
+  origin: function (origin, callback) {
+    const allowed = [
+      "http://localhost:5173",
+      "https://sic-gules.vercel.app"
+    ];
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
+
+console.log("CORS ORIGIN:", process.env.NODE_ENV);
 
 
 
